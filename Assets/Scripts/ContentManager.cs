@@ -25,6 +25,12 @@ namespace UGUI
         {
             _inventoryButtons.Add(button);
         }
+
+        public void RemoveGameobjectFromList(GameObject button)
+        {
+            _inventoryButtons.Remove(button);
+        }
+
     }
 
 }
