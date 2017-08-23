@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace UGUI
@@ -79,7 +78,7 @@ namespace UGUI
                     inventoryButton.name = "Capsule " + number + " button";
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new System.ArgumentOutOfRangeException();
             }
             ContentManager.Instance.AddGameobjectToList(inventoryButton);
         }
