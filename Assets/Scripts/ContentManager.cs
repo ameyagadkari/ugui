@@ -28,6 +28,8 @@ namespace UGUI
             if (CurrentlySelected == null)
             {
                 CurrentlySelected = button.GetComponent<InventoryButton>();
+                Manager.Instance.WriteToFile(CurrentlySelected.Holder.name + ":");
+                Manager.Instance.WriteToFile("{");
             }
             else
             {

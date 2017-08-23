@@ -55,7 +55,6 @@ namespace UGUI
             GameObject inventoryObject = Instantiate(_holderPrefab, Vector3.zero, Quaternion.identity,
                 _inventory3DObjectParentTransform);
             inventoryButton.GetComponent<InventoryButton>().Holder = inventoryObject;
-            ContentManager.Instance.AddGameobjectToList(inventoryButton);
             int number;
             switch (ItemName)
             {
@@ -82,6 +81,7 @@ namespace UGUI
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+            ContentManager.Instance.AddGameobjectToList(inventoryButton);
         }
     }
 }

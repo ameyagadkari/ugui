@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.VR.WSA.Persistence;
 
 namespace UGUI
 {
     public class InventoryButton : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        public GameObject Holder { private get; set; }
+        public GameObject Holder { get; set; }
+        public static bool DragActive { get; private set; }
         private Button _button;
         private Image _image;
         private Color _fadeColor;
-        private Vector3 _startPosition;
         private bool _isDraging;
         private CanvasGroup _canvasGroup;
         private Transform _parentTransform;
@@ -46,6 +47,9 @@ namespace UGUI
             ContentManager.Instance.CurrentlySelected = this;
             Holder.SetActive(true);
             _image.color = Color.white;
+            Manager.Instance.WriteToFile("}");
+            Manager.Instance.WriteToFile(Holder.name + ":");
+            Manager.Instance.WriteToFile("{");
         }
 
         public void Remove()
@@ -59,8 +63,8 @@ namespace UGUI
         {
             _isDraging = true;
             _canvasGroup.blocksRaycasts = false;
-            _startPosition = transform.position;
             transform.SetParent(_canvasTransform);
+            DragActive = true;
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -72,8 +76,8 @@ namespace UGUI
         {
             _isDraging = false;
             _canvasGroup.blocksRaycasts = true;
-            transform.position = _startPosition;
             transform.SetParent(_parentTransform);
+            DragActive = false;
         }
 
     }

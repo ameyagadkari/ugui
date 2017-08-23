@@ -16,6 +16,9 @@ namespace UGUI
         private Text _position;
         private Text _rotation;
         private Text _scale;
+        private bool _logPosition;
+        private bool _logRotation;
+        private bool _logScale;
 
         private void Start()
         {
@@ -46,14 +49,33 @@ namespace UGUI
                              + " Z: " +
                              (transform.eulerAngles.z > 180.0f ? (-transform.eulerAngles.z + 180.0f).ToString("F3") : transform.eulerAngles.z.ToString("F3"));
             if (!Input.GetMouseButton(1)) return;
-            transform.Rotate(Vector3.forward, -Mathf.Deg2Rad * Input.GetAxis("Mouse X") * RotationSpeed);
-            transform.Rotate(Vector3.right, Mathf.Deg2Rad * Input.GetAxis("Mouse Y") * RotationSpeed);
+            float mouseXAxisValue = Input.GetAxis("Mouse X");
+            float mouseYAxisValue = Input.GetAxis("Mouse Y");
+            transform.Rotate(Vector3.forward, -Mathf.Deg2Rad * mouseXAxisValue * RotationSpeed);
+            transform.Rotate(Vector3.right, Mathf.Deg2Rad * mouseYAxisValue * RotationSpeed);
+            _logRotation = mouseXAxisValue > 0.0f || mouseXAxisValue < 0.0f || mouseYAxisValue > 0.0f ||
+                           mouseYAxisValue < 0.0f;
+            if (!_logRotation) return;
+            Manager.Instance.WriteToFile("     Rotation");
+            Manager.Instance.WriteToFile("     X: " +
+                                         (transform.eulerAngles.x > 180.0f
+                                             ? (-transform.eulerAngles.x + 180.0f).ToString("F3")
+                                             : transform.eulerAngles.x.ToString("F3"))
+                                         + " Y: " +
+                                         (transform.eulerAngles.y > 180.0f
+                                             ? (-transform.eulerAngles.y + 180.0f).ToString("F3")
+                                             : transform.eulerAngles.y.ToString("F3"))
+                                         + " Z: " +
+                                         (transform.eulerAngles.z > 180.0f
+                                             ? (-transform.eulerAngles.z + 180.0f).ToString("F3")
+                                             : transform.eulerAngles.z.ToString("F3")));
         }
 
         private void ScaleObject()
         {
+            float mouseScrollWheelAxisValue = Input.GetAxis("Mouse ScrollWheel");
             float scale = transform.localScale.x;
-            scale += Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * ScaleSpeed;
+            scale += mouseScrollWheelAxisValue * Time.deltaTime * ScaleSpeed;
             if (scale > MaxScale) scale = MaxScale;
             else if (scale < MinScale) scale = MinScale;
             transform.localScale = new Vector3(scale, scale, scale);
@@ -61,6 +83,13 @@ namespace UGUI
                           transform.localScale.x.ToString("F3") + " Y: " +
                           transform.localScale.y.ToString("F3") + " Z: " +
                           transform.localScale.z.ToString("F3");
+            _logScale = mouseScrollWheelAxisValue > 0.0f || mouseScrollWheelAxisValue < 0.0f;
+            if (!_logScale) return;
+            Manager.Instance.WriteToFile("     Scale");
+            Manager.Instance.WriteToFile("     X: " +
+                                         transform.localScale.x.ToString("F3") + " Y: " +
+                                         transform.localScale.y.ToString("F3") + " Z: " +
+                                         transform.localScale.z.ToString("F3"));
         }
         public void OnDrag(PointerEventData eventData)
         {
@@ -76,12 +105,28 @@ namespace UGUI
             if (newPositionViewport.x > MaxViewport || newPositionViewport.x < MinViewport)
             {
                 newPosition.x = originalPosition.x;
+                _logPosition = false;
+            }
+            else
+            {
+                _logPosition = true;
             }
             if (newPositionViewport.y > MaxViewport || newPositionViewport.y < MinViewport)
             {
                 newPosition.y = originalPosition.y;
+                _logPosition = false;
+            }
+            else
+            {
+                _logPosition = true;
             }
             transform.position = newPosition;
+            if (!_logPosition) return;
+            Manager.Instance.WriteToFile("     Position");
+            Manager.Instance.WriteToFile("     X: " +
+                                         transform.position.x.ToString("F3") + " Y: " +
+                                         transform.position.y.ToString("F3") + " Z: " +
+                                         transform.position.z.ToString("F3"));
         }
     }
 }
