@@ -13,22 +13,31 @@ namespace UGUI
             }
         }
         private static ContentManager _instance;
-        private List<GameObject> _inventoryButtons;
+        public List<GameObject> InventoryButtons { get; private set; }
 
+        public InventoryButton CurrentlySelected { get; set; }
 
         private void Start()
         {
-            _inventoryButtons = new List<GameObject>();
+            InventoryButtons = new List<GameObject>();
         }
 
         public void AddGameobjectToList(GameObject button)
         {
-            _inventoryButtons.Add(button);
+            InventoryButtons.Add(button);
+            if (CurrentlySelected == null)
+            {
+                CurrentlySelected = button.GetComponent<InventoryButton>();
+            }
+            else
+            {
+                button.GetComponent<InventoryButton>().ToggleActiveForHolder();
+            }
         }
 
         public void RemoveGameobjectFromList(GameObject button)
         {
-            _inventoryButtons.Remove(button);
+            InventoryButtons.Remove(button);
         }
 
     }

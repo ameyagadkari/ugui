@@ -16,7 +16,7 @@ namespace UGUI
         private Transform _parentTransform;
         private Transform _canvasTransform;
 
-        private void Start()
+        private void Awake()
         {
             _button = GetComponent<Button>();
             _image = GetComponent<Image>();
@@ -31,13 +31,21 @@ namespace UGUI
         private void OnDestroy()
         {
             _button.onClick.RemoveAllListeners();
+            if (ContentManager.Instance.CurrentlySelected == this && ContentManager.Instance.InventoryButtons.Count != 0)
+            {
+                ContentManager.Instance.CurrentlySelected = ContentManager.Instance.InventoryButtons[0]
+                    .GetComponent<InventoryButton>();
+            }
         }
 
         public void ToggleActiveForHolder()
         {
             if (_isDraging) return;
-            Holder.SetActive(!Holder.activeSelf);
-            _image.color = Holder.activeSelf ? Color.white : _fadeColor;
+            ContentManager.Instance.CurrentlySelected.Holder.SetActive(false);
+            ContentManager.Instance.CurrentlySelected._image.color = _fadeColor;
+            ContentManager.Instance.CurrentlySelected = this;
+            Holder.SetActive(true);
+            _image.color = Color.white;
         }
 
         public void Remove()

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UGUI
@@ -28,6 +29,7 @@ namespace UGUI
         private GameObject _holderPrefab;
         private Sprite _holderPrefabSprite;
         private Transform _inventoryButtonParentTransform;
+        private Transform _inventory3DObjectParentTransform;
         private Button _button;
 
         private void Start()
@@ -36,6 +38,7 @@ namespace UGUI
             _holderPrefab = Resources.Load<GameObject>(ItemPaths[(int)ItemName]);
             _holderPrefabSprite = Resources.Load<Sprite>(ItemSpritePaths[(int)ItemName]);
             _inventoryButtonParentTransform = GameObject.FindGameObjectWithTag("InventoryButtonParent").transform;
+            _inventory3DObjectParentTransform = GameObject.FindGameObjectWithTag("Inventory3DObjectParent").transform;
             _button = GetComponent<Button>();
             _button.onClick.AddListener(CreateObjectAndButton);
         }
@@ -48,10 +51,37 @@ namespace UGUI
         private void CreateObjectAndButton()
         {
             GameObject inventoryButton = Instantiate(_inventoryButtonPrefab, _inventoryButtonParentTransform);
-            inventoryButton.GetComponent<InventoryButton>().Holder =
-                Instantiate(_holderPrefab, Vector3.zero, Quaternion.identity);
-            inventoryButton.GetComponent<Image>().sprite = _holderPrefabSprite;
+            inventoryButton.GetComponent<Image>().sprite = _holderPrefabSprite;        
+            GameObject inventoryObject = Instantiate(_holderPrefab, Vector3.zero, Quaternion.identity,
+                _inventory3DObjectParentTransform);
+            inventoryButton.GetComponent<InventoryButton>().Holder = inventoryObject;
             ContentManager.Instance.AddGameobjectToList(inventoryButton);
+            int number;
+            switch (ItemName)
+            {
+                case ItemToCreate.Cube:
+                    number = MainManager.Instance.CubeNumber;
+                    inventoryObject.name = "Cube " + number;
+                    inventoryButton.name = "Cube " + number + " button";
+                    break;
+                case ItemToCreate.Sphere:
+                    number = MainManager.Instance.SphereNumber;
+                    inventoryObject.name = "Sphere " + number;
+                    inventoryButton.name = "Sphere " + number + " button";
+                    break;
+                case ItemToCreate.Cylinder:
+                    number = MainManager.Instance.CylinderNumber;
+                    inventoryObject.name = "Cylinder " + number;
+                    inventoryButton.name = "Cylinder " + number + " button";
+                    break;
+                case ItemToCreate.Capsule:
+                    number = MainManager.Instance.CapsuleNumber;
+                    inventoryObject.name = "Capsule " + number;
+                    inventoryButton.name = "Capsule " + number + " button";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }
