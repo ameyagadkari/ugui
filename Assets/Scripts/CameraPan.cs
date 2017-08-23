@@ -35,7 +35,7 @@ namespace UGUI
             transform.Translate(move, Space.Self);
             _logPan = direction.sqrMagnitude > 0.0f;
             if (!_logPan) return;
-            Manager.Instance.WriteToFile("     Camera Position");
+            Manager.Instance.WriteToFile("     User is panning");
             Manager.Instance.WriteToFile("     X: " +
                                          transform.position.x.ToString("F3") + " Y: " +
                                          transform.position.y.ToString("F3") + " Z: " +

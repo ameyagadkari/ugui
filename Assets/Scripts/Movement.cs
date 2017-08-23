@@ -56,7 +56,7 @@ namespace UGUI
             _logRotation = mouseXAxisValue > 0.0f || mouseXAxisValue < 0.0f || mouseYAxisValue > 0.0f ||
                            mouseYAxisValue < 0.0f;
             if (!_logRotation) return;
-            Manager.Instance.WriteToFile("     Rotation");
+            Manager.Instance.WriteToFile("     User is rotating");
             Manager.Instance.WriteToFile("     X: " +
                                          (transform.eulerAngles.x > 180.0f
                                              ? (-transform.eulerAngles.x + 180.0f).ToString("F3")
@@ -85,7 +85,7 @@ namespace UGUI
                           transform.localScale.z.ToString("F3");
             _logScale = mouseScrollWheelAxisValue > 0.0f || mouseScrollWheelAxisValue < 0.0f;
             if (!_logScale) return;
-            Manager.Instance.WriteToFile("     Scale");
+            Manager.Instance.WriteToFile("     User is scaling");
             Manager.Instance.WriteToFile("     X: " +
                                          transform.localScale.x.ToString("F3") + " Y: " +
                                          transform.localScale.y.ToString("F3") + " Z: " +
@@ -122,7 +122,7 @@ namespace UGUI
             }
             transform.position = newPosition;
             if (!_logPosition) return;
-            Manager.Instance.WriteToFile("     Position");
+            Manager.Instance.WriteToFile("     User is moving");
             Manager.Instance.WriteToFile("     X: " +
                                          transform.position.x.ToString("F3") + " Y: " +
                                          transform.position.y.ToString("F3") + " Z: " +
