@@ -5,7 +5,7 @@ namespace UGUI
 {
     public class HideHelp : MonoBehaviour
     {
-        public static bool IsShown;
+        public static bool IsShown { get; set; }
         private Button _button;
         private GameObject _hideHelpGameobject;
         private void Start()

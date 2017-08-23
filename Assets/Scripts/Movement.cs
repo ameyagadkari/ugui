@@ -65,24 +65,23 @@ namespace UGUI
         public void OnDrag(PointerEventData eventData)
         {
             if (!Input.GetMouseButton(0)) return;
+            if (CameraPan.EnablePan) return;
             Plane plane = new Plane(Vector3.forward, transform.position);
             Ray ray = eventData.pressEventCamera.ScreenPointToRay(eventData.position);
             float distance;
-            if (plane.Raycast(ray, out distance))
+            if (!plane.Raycast(ray, out distance)) return;
+            Vector3 newPosition = ray.origin + ray.direction * distance;
+            Vector3 newPositionViewport = eventData.pressEventCamera.WorldToViewportPoint(newPosition);
+            Vector3 originalPosition = transform.position;
+            if (newPositionViewport.x > MaxViewport || newPositionViewport.x < MinViewport)
             {
-                Vector3 newPosition = ray.origin + ray.direction * distance;
-                Vector3 newPositionViewport = eventData.pressEventCamera.WorldToViewportPoint(newPosition);
-                Vector3 originalPosition = transform.position;
-                if (newPositionViewport.x > MaxViewport || newPositionViewport.x < MinViewport)
-                {
-                    newPosition.x = originalPosition.x;
-                }
-                if (newPositionViewport.y > MaxViewport || newPositionViewport.y < MinViewport)
-                {
-                    newPosition.y = originalPosition.y;
-                }
-                transform.position = newPosition;
+                newPosition.x = originalPosition.x;
             }
+            if (newPositionViewport.y > MaxViewport || newPositionViewport.y < MinViewport)
+            {
+                newPosition.y = originalPosition.y;
+            }
+            transform.position = newPosition;
         }
     }
 }
