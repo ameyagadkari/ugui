@@ -5,7 +5,6 @@ The list is scrollable<br />
 You can delete an object by dragging its icon from list and putting it in bin<br />
 There is in-game help and exit button<br />
 User is logged in the logging folder with filename same as user name<br />
-
 # controls
 LMB and drag the object to move<br />
 RMB and drag to rotate<br />
